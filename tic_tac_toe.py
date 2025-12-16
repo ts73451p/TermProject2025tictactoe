@@ -1,7 +1,8 @@
 class TicTacToe:
     def __init__(self):
-        self.board = [" "] * 9
-        self.current_player = "X"
+        self.board = [" "] * 9          
+        self.current_player = "X"       
+        self.turn_count = 0 
 
     def print_board(self):
         print()
@@ -13,33 +14,37 @@ class TicTacToe:
         print()
 
     def player_move(self):
-        while True:
+        while True:                     # loop
             try:
-                move = int(input(f"Player {self.current_player}, choose a position (1-9): "))
+                move = int(input(
+                    f"Player {self.current_player}, choose a position (1-9): "
+                ))
+
+                # input validation
                 if move < 1 or move > 9:
-                    print("Please choose a number between 1 and 9.")
-                elif self.board[move - 1] != " ":
-                    print("That spot is already taken. Try again.")
+                    print("Error: Please enter a number between 1 and 9.")
+                elif self.board[move - 1] != " ":  # math operation (-)
+                    print("Error: That position is already taken.")
                 else:
                     self.board[move - 1] = self.current_player
                     break
+
             except ValueError:
-                print("Invalid input. Please enter a number.")
+                print("Error: Invalid input. Please enter a number.")
 
     def check_winner(self):
-        wins = [
-            (0, 1, 2), (3, 4, 5), (6, 7, 8),  # rows
-            (0, 3, 6), (1, 4, 7), (2, 5, 8),  # columns
-            (0, 4, 8), (2, 4, 6)              # diagonals
+        win_patterns = [
+            (0, 1, 2), (3, 4, 5), (6, 7, 8),   # rows
+            (0, 3, 6), (1, 4, 7), (2, 5, 8),   # columns
+            (0, 4, 8), (2, 4, 6)               # diagonals
         ]
-        for a, b, c in wins:
+
+        for a, b, c in win_patterns:           # loop
             if self.board[a] == self.board[b] == self.board[c] != " ":
                 return True
+
         return False
-
-    def check_tie(self):
-        return " " not in self.board
-
+    
     def switch_player(self):
         if self.current_player == "X":
             self.current_player = "O"
@@ -54,11 +59,13 @@ class TicTacToe:
             self.player_move()
             self.print_board()
 
+            self.turn_count += 1               # math operation (+)
+
             if self.check_winner():
                 print(f"Player {self.current_player} wins!")
                 break
 
-            if self.check_tie():
+            if self.turn_count % 9 == 0:       # math operation (%)
                 print("It's a tie!")
                 break
 
@@ -67,18 +74,21 @@ class TicTacToe:
     def reset_game(self):
         self.board = [" "] * 9
         self.current_player = "X"
-
+        self.turn_count = 0
 
 def main():
-    game = TicTacToe()
+    game = TicTacToe()                          # class instance
 
     while True:
         game.play_game()
         again = input("Play again? (y/n): ").lower()
+
         if again != "y":
             print("Thanks for playing!")
             break
+
         game.reset_game()
+
 
 
 main()
